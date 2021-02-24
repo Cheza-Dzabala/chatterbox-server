@@ -14,14 +14,6 @@ var conn = () => {
 
   return {
     pool: _pool,
-    connect: () => {
-      _pool.on("error", () => {
-        console.log("Client Errrored");
-      });
-      _pool.on("notification", (message) =>
-        console.log("Client Message", message)
-      );
-    },
     closeConnection: () => _pool.end(),
   };
 };

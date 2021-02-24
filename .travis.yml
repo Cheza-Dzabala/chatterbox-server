@@ -1,0 +1,19 @@
+language: node_js
+
+node_js:
+  - node
+
+services:
+  - postgresql
+
+before_script:
+  - psql -c 'create database chatterbox_test;' -U postgres
+
+install:
+  - npm install -g npm@latest
+  - npm install
+
+cache:
+  npm: false
+
+after_success: npm run coverage

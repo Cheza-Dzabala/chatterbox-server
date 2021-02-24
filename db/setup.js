@@ -1,6 +1,15 @@
 const { Client } = require("pg");
-const { connection } = require("./db/connection");
+const { connection } = require("./connection");
 
+const _dropDB = async () => {
+  try {
+    const query = ` DELETE FROM users;`;
+    const table = await connection().pool.query(query);
+    return;
+  } catch (err) {
+    console.log(`Table Creation error: ${err}`);
+  }
+};
 const _configureDB = async () => {
   try {
     const query = `
@@ -11,8 +20,7 @@ const _configureDB = async () => {
         password varchar
     );
     `;
-    await connection().pool.query(query);
-    // console.log("Table Created", table);
+    const table = await connection().pool.query(query);
     return;
   } catch (err) {
     console.log(`Table Creation error: ${err}`);
@@ -21,4 +29,5 @@ const _configureDB = async () => {
 
 module.exports = {
   configure: _configureDB,
+  destroy: _dropDB,
 };

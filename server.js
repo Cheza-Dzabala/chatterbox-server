@@ -1,7 +1,7 @@
 const http = require("http");
 const url = require("url");
 const { routes } = require("./routes");
-const { configure } = require("./setup");
+const { configure } = require("./db/setup");
 const {
   environmentConfig: { PORT, HOSTNAME },
 } = require("./config");
@@ -34,3 +34,5 @@ const server = http.createServer((req, res) => {
 server.listen(PORT, HOSTNAME, () => {
   console.log(`Server running at http://${HOSTNAME}:${PORT}/`);
 });
+
+module.exports = server;

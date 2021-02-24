@@ -1,8 +1,10 @@
 const {
   authenticationController,
 } = require("./controllers/authentication_controller");
+const { loginSchema, registrationSchema } = require("./models/schemas");
+const { responseUtility } = require("./utils/responses");
 
-const handleAuth = authenticationController();
+const _handleAuth = authenticationController();
 const _respond = (res, statusCode, payloadStr) => {
   res.setHeader("Content-Type", "application/json");
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -11,40 +13,79 @@ const _respond = (res, statusCode, payloadStr) => {
   res.end("\n");
 };
 
+const _processErrors = (error) => {
+  const response = responseUtility(
+    422,
+    error.details[0].message,
+    "validation errror"
+  );
+  return response;
+};
+
 let _routes = {
   // Handle Login Route
   login: async (data, res) => {
-    switch (data.method) {
-      case "post":
-        const response = await handleAuth.login(data.body);
-        _respond(res, response.statusCode, JSON.stringify(response.data));
-        break;
-      default:
-        let payload = {
-          data: { message: "Method not allowed on this route" },
-        };
-        respond(res, 405, JSON.stringify(payload));
-        break;
+    const { body, method } = data;
+    try {
+      const { error, value } = loginSchema.validate(body);
+      if (error) {
+        const response = _processErrors(error);
+        return _respond(
+          res,
+          response.statusCode,
+          JSON.stringify(response.data)
+        );
+      }
+      switch (method) {
+        case "post":
+          const { statusCode, data } = await _handleAuth.login(value);
+          _respond(res, statusCode, JSON.stringify(data));
+          break;
+        default:
+          let payload = {
+            data: { message: "Method not allowed on this route" },
+          };
+          _respond(res, 405, JSON.stringify(payload));
+          break;
+      }
+    } catch (e) {
+      console.log("\n\n Internal Server Error::::: ", e);
+      _respond(res, 500, "Something went wrong");
     }
   },
 
   // Handle Registration Route
   register: async (data, res) => {
-    switch (data.method) {
-      case "post": {
-        const response = await handleAuth.register(data.body);
-        _respond(res, response.statusCode, JSON.stringify(response.data));
-        return;
+    const { body, method } = data;
+    try {
+      const { error, value } = registrationSchema.validate(body);
+      if (error) {
+        const response = _processErrors(error);
+        return _respond(
+          res,
+          response.statusCode,
+          JSON.stringify(response.data)
+        );
       }
-      default: {
-        let payload = {
-          data: {
-            message: "Method not allowed on this route",
-          },
-        };
-        _respond(res, 405, JSON.stringify(payload));
-        return;
+      switch (method) {
+        case "post": {
+          const { statusCode, data } = await _handleAuth.register(value);
+          _respond(res, statusCode, JSON.stringify(data));
+          return;
+        }
+        default: {
+          let payload = {
+            data: {
+              message: "Method not allowed on this route",
+            },
+          };
+          _respond(res, 405, JSON.stringify(payload));
+          return;
+        }
       }
+    } catch (e) {
+      console.log("\n\n Internal Server Error::::: ", e);
+      _respond(res, 500, "Something went wrong");
     }
   },
 
