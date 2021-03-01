@@ -1,6 +1,9 @@
 const dotenv = require("dotenv");
+const { boolean } = require("joi");
 
 dotenv.config();
+
+const isSecure = process.env.NODE_ENV === "production" ? true : false;
 
 const _databaseConfig = {
   user: process.env.DATABASE_USER,
@@ -8,6 +11,7 @@ const _databaseConfig = {
   database: process.env.DATABASE_NAME,
   password: process.env.DATABASE_PASSWORD,
   port: process.env.DATABASE_PORT,
+  secure: isSecure,
 };
 
 const _testDatabaseConfig = {
@@ -16,6 +20,7 @@ const _testDatabaseConfig = {
   database: process.env.TEST_DATABASE_NAME,
   password: process.env.TEST_DATABASE_PASSWORD,
   port: process.env.TEST_DATABASE_PORT,
+  secure: false,
 };
 
 const _environmentConfig = {

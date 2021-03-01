@@ -8,6 +8,7 @@ var conn = () => {
     database: dbConfig.database,
     password: dbConfig.password,
     port: dbConfig.port,
+    ssl: { rejectUnauthorized: false },
   });
 
   _pool.connect();

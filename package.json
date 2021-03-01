@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "dev": "NODE_ENV=dev nodemon server.js",
+    "build": "NODE_ENV=production node server.js",
     "test": "NODE_ENV=test nyc mocha spec/*.spec.js --exit",
     "test:cov": "nyc npm run test",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
@@ -18,9 +19,11 @@
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.0.1",
+    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "joi": "^17.4.0",
     "jsonwebtoken": "^8.5.1",
+    "node-polyfill-webpack-plugin": "^1.0.3",
     "pg": "^8.5.1",
     "socket.io": "^3.1.2"
   },

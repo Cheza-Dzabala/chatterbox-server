@@ -19,10 +19,6 @@ describe("Authentication ", () => {
     await configure();
   });
 
-  after(async () => {
-    await destroy();
-  });
-
   describe("When a user tries to register it", () => {
     it("Should not access route with 'GET' request", (done) => {
       chai
@@ -121,5 +117,13 @@ describe("Authentication ", () => {
           done();
         });
     });
+  });
+
+  after(async () => {
+    try {
+      await destroy();
+    } catch (e) {
+      console.log("Destrtoy err", e.message);
+    }
   });
 });

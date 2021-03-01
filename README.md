@@ -8,6 +8,7 @@
 
 [![Build Status](https://travis-ci.org/Cheza-Dzabala/chatterbox-server.svg?branch=main)](https://travis-ci.org/Cheza-Dzabala/chatterbox-server)
 [![Coverage Status](https://coveralls.io/repos/github/Cheza-Dzabala/chatterbox-server/badge.svg?branch=main)](https://coveralls.io/github/Cheza-Dzabala/chatterbox-server?branch=main)
+[![Maintainability](https://api.codeclimate.com/v1/badges/4581614bd1b7d327beba/maintainability)](https://codeclimate.com/github/Cheza-Dzabala/chatterbox-server/maintainability)
 
 A simple NodeJs backend application for chatterbox.
 

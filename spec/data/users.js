@@ -17,6 +17,13 @@ const validUserRegistration = {
   password: "12345362",
   confirm_password: "12345362",
 };
+const secondValidUserRegistration = {
+  name: "Macheza Dzabala",
+  email: "dzabalamacheza@live.com",
+  username: "cheza",
+  password: "12345362",
+  confirm_password: "12345362",
+};
 
 const missingUserName = {
   email: "chezad@live.com",
@@ -30,4 +37,5 @@ module.exports = {
   validUserLogin: validUserLogin,
   missingPasswordLogin: missingPasswordLogin,
   badEmailUserLogin: badEmailUserLogin,
+  secondValidUserRegistration: secondValidUserRegistration,
 };

@@ -1,10 +1,14 @@
 const {
   authenticationController,
 } = require("./controllers/authentication_controller");
+const { messagesController } = require("./controllers/messages_controller");
 const { loginSchema, registrationSchema } = require("./models/schemas");
 const { responseUtility } = require("./utils/responses");
+const { decodeToken } = require("./utils/token");
 
 const _handleAuth = authenticationController();
+const _messagesController = messagesController();
+
 const _respond = (res, statusCode, payloadStr) => {
   res.setHeader("Content-Type", "application/json");
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -89,6 +93,47 @@ let _routes = {
     }
   },
 
+  messages: async (data, res) => {
+    const { method, headers } = data;
+    if (headers.authorization === undefined) {
+      let payload = {
+        data: {
+          message: "User not authorized",
+        },
+      };
+      _respond(res, 403, JSON.stringify(payload));
+    }
+    try {
+      const token = headers.authorization.split(" ")[1];
+      decodeToken(token);
+      switch (method) {
+        case "get": {
+          const {
+            statusCode,
+            data,
+          } = await _messagesController.getConversation();
+          _respond(res, statusCode, JSON.stringify(data));
+          return;
+        }
+        default: {
+          let payload = {
+            data: {
+              message: "Method not allowed on this route",
+            },
+          };
+          _respond(res, 405, JSON.stringify(payload));
+          return;
+        }
+      }
+    } catch (e) {
+      let payload = {
+        data: {
+          message: e.message,
+        },
+      };
+      _respond(res, 403, JSON.stringify(payload));
+    }
+  },
   // Handle Route Not Found 404
   notFound: function (data, res) {
     let payload = {
